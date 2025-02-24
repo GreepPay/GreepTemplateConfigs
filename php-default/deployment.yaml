@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-fpm
+  namespace: ${environment}-${serviceName}
+  labels:
+    tier: backend
+    layer: fpm
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: fpm
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: fpm
+    spec:
+      containers:
+        - name: fpm
+          image: ${DOCKER_REGISTRY}/${serviceName}_fpm_server:v${imageVersion}
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+                name: ${serviceName}
+            - secretRef:
+                name: ${serviceName}
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-webserver
+  namespace: ${environment}-${serviceName}
+  labels:
+    tier: backend
+    layer: webserver
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: webserver
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: webserver
+    spec:
+      containers:
+        - name: webserver
+          image: ${DOCKER_REGISTRY}/${serviceName}_web_server:v${imageVersion}
+          ports:
+            - containerPort: 80
+          env:
+            # Inject the FPM Host as we did with Docker Compose
+            - name: FPM_HOST
+              value: ${serviceName}-fpm:9000

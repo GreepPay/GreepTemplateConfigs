@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ${serviceName}-${environment}-scheduler
+  namespace: ${environment}-${serviceName}
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: scheduler
+            image: ${DOCKER_REGISTRY}/${serviceName}_cron:v${imageVersion}
+            command:
+              - php
+            args:
+              - artisan
+              - schedule:run
+            envFrom:
+              - configMapRef:
+                  name: ${serviceName}
+              - secretRef:
+                  name: ${serviceName}
+          restartPolicy: OnFailure

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-dns-2
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-dns-2
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - "${wildcardDomain2}"
+    secretName: laravel-in-kubernetes-tls-wildcard-dns01-2
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: "${wildcardDomain2}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-webserver
+            port:
+              number: 80

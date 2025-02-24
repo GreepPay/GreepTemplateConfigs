@@ -1,0 +1,173 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-1
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-new-1
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "6000"
+    # nginx.ingress.kubernetes.io/server-snippets: |
+    #   location /socket {
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header X-Forwarded-Host $http_host;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header X-Forwarded-For $remote_addr;
+    #     proxy_set_header Host $host;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_cache_bypass $http_upgrade;
+    #     }
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - ${httpsDomain1}
+    secretName: laravel-in-kubernetes-tls-1
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: ${httpsDomain1}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-web
+            port:
+              number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-2
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-new-2
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "6000"
+    # nginx.ingress.kubernetes.io/server-snippets: |
+    #   location /socket {
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header X-Forwarded-Host $http_host;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header X-Forwarded-For $remote_addr;
+    #     proxy_set_header Host $host;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_cache_bypass $http_upgrade;
+    #     }
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - mx1.${httpsDomain1}
+    secretName: laravel-in-kubernetes-tls-2
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: mx1.${httpsDomain1}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-web
+            port:
+              number: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-3
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-new-3
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "6000"
+    # nginx.ingress.kubernetes.io/server-snippets: |
+    #   location /socket {
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header X-Forwarded-Host $http_host;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header X-Forwarded-For $remote_addr;
+    #     proxy_set_header Host $host;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_cache_bypass $http_upgrade;
+    #     }
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - mx2.${httpsDomain1}
+    secretName: laravel-in-kubernetes-tls-3
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: mx2.${httpsDomain1}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-web
+            port:
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-4
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-new-4
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "6000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "6000"
+    # nginx.ingress.kubernetes.io/server-snippets: |
+    #   location /socket {
+    #     proxy_set_header Upgrade $http_upgrade;
+    #     proxy_http_version 1.1;
+    #     proxy_set_header X-Forwarded-Host $http_host;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header X-Forwarded-For $remote_addr;
+    #     proxy_set_header Host $host;
+    #     proxy_set_header Connection "upgrade";
+    #     proxy_cache_bypass $http_upgrade;
+    #     }
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - track.${httpsDomain1}
+    secretName: laravel-in-kubernetes-tls-4
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: track.${httpsDomain1}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-web
+            port:
+              number: 80

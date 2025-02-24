@@ -1,0 +1,30 @@
+# Service for mail-server-web
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${serviceName}-web
+  namespace: ${environment}-${serviceName}
+spec:
+  selector:
+    tier: backend
+    layer: mail-server-web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+# Service for mail-server-smtp
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${serviceName}-smtp
+  namespace: ${environment}-${serviceName}
+spec:
+  type: LoadBalancer
+  selector:
+    tier: backend
+    layer: mail-server-smtp
+  ports:
+  - protocol: TCP
+    port: 25
+    targetPort: 25

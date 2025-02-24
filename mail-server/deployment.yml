@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-web
+  namespace: ${environment}-${serviceName}
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: mail-server-web
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: mail-server-web
+    spec:
+      containers:
+      - name: mail-server-web
+        image: ${DOCKER_REGISTRY}/${serviceName}_mail-server:v${imageVersion}
+        command: ["/bin/sh", "-c", "service nginx start & postal web-server & wait"]
+        ports:
+        - containerPort: 5000
+        - containerPort: 80
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "2"
+            memory: "1.5Gi"
+          requests:
+            cpu: "300m"
+            memory: "512Mi"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-smtp
+  namespace: ${environment}-${serviceName}
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: mail-server-smtp
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: mail-server-smtp
+    spec:
+      containers:
+      - name: mail-server-smtp
+        image: ${DOCKER_REGISTRY}/${serviceName}_mail-server:v${imageVersion}
+        command: ["postal", "smtp-server"]
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "300m"
+            memory: "512Mi"
+        ports:
+        - containerPort: 25  # SMTP
+        - containerPort: 587 # Submission
+        securityContext:
+          capabilities:
+            add: ["NET_BIND_SERVICE"]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-worker
+  namespace: ${environment}-${serviceName}
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: mail-server-worker
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: mail-server-worker
+    spec:
+      containers:
+      - name: mail-server-worker
+        image: ${DOCKER_REGISTRY}/${serviceName}_mail-server:v${imageVersion}
+        command: ["postal", "worker"]
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+          requests:
+            cpu: "300m"
+            memory: "512Mi"

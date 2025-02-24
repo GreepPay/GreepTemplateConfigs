@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-websocket
+  namespace: ${environment}-${serviceName}
+  labels:
+    tier: backend
+    layer: websocket
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: websocket
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: websocket
+    spec:
+      containers:
+        - name: websocket
+          image: ${DOCKER_REGISTRY}/${serviceName}_websocket_server:v${imageVersion}
+          ports:
+            - containerPort: 6001
+          envFrom:
+            - configMapRef:
+                name: ${serviceName}
+            - secretRef:
+                name: ${serviceName}

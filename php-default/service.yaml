@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${serviceName}-fpm
+  namespace: ${environment}-${serviceName}
+spec:
+  selector:
+    tier: backend
+    layer: fpm
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${serviceName}-webserver
+  namespace: ${environment}-${serviceName}
+spec:
+  selector:
+    tier: backend
+    layer: webserver
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

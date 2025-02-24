@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-${environment}-queue-worker-high
+  namespace: ${environment}-${serviceName}
+  labels:
+    tier: backend
+    layer: queue-worker
+    queue: high
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: backend
+      layer: queue-worker
+      queue: high
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: queue-worker
+        queue: high
+    spec:
+      containers:
+        - name: queue-worker
+          image: ${DOCKER_REGISTRY}/${serviceName}_queue_worker_high:v${imageVersion}
+          ports:
+            - containerPort: 9000
+          envFrom:
+            - configMapRef:
+                name: ${serviceName}
+            - secretRef:
+                name: ${serviceName}

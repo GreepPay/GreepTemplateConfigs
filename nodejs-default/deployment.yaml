@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${serviceName}-webserver
+  namespace: ${environment}-${serviceName}
+  labels:
+    tier: backend
+    layer: webserver
+spec:
+  replicas: ${deploymentReplicas}
+  selector:
+    matchLabels:
+      tier: backend
+      layer: webserver
+  template:
+    metadata:
+      labels:
+        tier: backend
+        layer: webserver
+    spec:
+      containers:
+        - name: webserver
+          image: ${DOCKER_REGISTRY}/${serviceName}_web_server:v${imageVersion}
+          ports:
+            - containerPort: 8080
+            - containerPort: 2368

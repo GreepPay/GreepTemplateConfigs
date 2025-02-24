@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata: 
+  name: ${serviceName}-${environment}-dns-1
+  namespace: ${environment}-${serviceName}
+spec: 
+  acme: 
+    email: ayomide@ceedcap.com
+    privateKeySecretRef: 
+      name: ${serviceName}-${environment}-dns-1
+    server: "https://acme-v02.api.letsencrypt.org/directory"
+    solvers: 
+    - selector: {}
+      dns01: 
+          digitalocean: 
+            tokenSecretRef: 
+              key: access-token
+              name: digitalocean-dns

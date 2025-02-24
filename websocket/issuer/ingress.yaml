@@ -1,0 +1,40 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${serviceName}-${environment}-ingress-websocket
+  namespace: ${environment}-${serviceName}
+  annotations:
+    # We need to add the cluster issuer annotation
+    cert-manager.io/cluster-issuer: ${serviceName}-${environment}-new-websocket
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location / {
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_http_version 1.1;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header Connection "upgrade";
+        proxy_cache_bypass $http_upgrade;
+        }
+spec:
+ # We need to add a tls section
+  tls:
+  - hosts:
+    - ${websocketDomain}
+    secretName: laravel-in-kubernetes-tls-websocket
+  ingressClassName: nginx
+  rules:
+  # We also need to add a host for our ingress path
+  - host: ${websocketDomain}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ${serviceName}-websocket
+            port:
+              number: 6001
