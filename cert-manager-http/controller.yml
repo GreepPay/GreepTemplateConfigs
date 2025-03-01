@@ -1,4 +1,3 @@
-
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -37,10 +36,10 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 data:
-  use-proxy-protocol: 'false'
-  proxy-connect-timeout: '60s'
-  proxy-read-timeout: '60s'
-  client-max-body-size: '200m'
+  use-proxy-protocol: "false"
+  proxy-connect-timeout: "60s"
+  proxy-read-timeout: "60s"
+  client-max-body-size: "200m"
   enable-underscores-in-headers: "true"
 ---
 # Source: ingress-nginx/templates/clusterrole.yaml
@@ -56,7 +55,7 @@ metadata:
   name: ingress-nginx
 rules:
   - apiGroups:
-      - ''
+      - ""
     resources:
       - configmaps
       - endpoints
@@ -67,13 +66,13 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ''
+      - ""
     resources:
       - nodes
     verbs:
       - get
   - apiGroups:
-      - ''
+      - ""
     resources:
       - services
     verbs:
@@ -89,7 +88,7 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ''
+      - ""
     resources:
       - events
     verbs:
@@ -145,13 +144,13 @@ metadata:
   namespace: ingress-nginx
 rules:
   - apiGroups:
-      - ''
+      - ""
     resources:
       - namespaces
     verbs:
       - get
   - apiGroups:
-      - ''
+      - ""
     resources:
       - configmaps
       - pods
@@ -162,7 +161,7 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ''
+      - ""
     resources:
       - services
     verbs:
@@ -192,7 +191,7 @@ rules:
       - list
       - watch
   - apiGroups:
-      - ''
+      - ""
     resources:
       - configmaps
     resourceNames:
@@ -201,13 +200,13 @@ rules:
       - get
       - update
   - apiGroups:
-      - ''
+      - ""
     resources:
       - configmaps
     verbs:
       - create
   - apiGroups:
-      - ''
+      - ""
     resources:
       - events
     verbs:
@@ -266,11 +265,10 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
     # We need to add this annotation for the load balancer hostname to fix the bug
     # Replace it with your domain or subdomain
-    service.beta.kubernetes.io/do-loadbalancer-hostname: "ntw.gpnetwork.co"
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: "Shoppt"
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: "greep"
   labels:
     helm.sh/chart: ingress-nginx-4.0.1
     app.kubernetes.io/name: ingress-nginx
@@ -551,7 +549,7 @@ metadata:
     app.kubernetes.io/component: admission-webhook
 rules:
   - apiGroups:
-      - ''
+      - ""
     resources:
       - secrets
     verbs:
