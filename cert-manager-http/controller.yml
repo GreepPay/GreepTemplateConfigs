@@ -268,7 +268,7 @@ metadata:
     service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
     # We need to add this annotation for the load balancer hostname to fix the bug
     # Replace it with your domain or subdomain
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: "greep"
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: "MC_greep_greep-cluster_eastus"
   labels:
     helm.sh/chart: ingress-nginx-4.0.1
     app.kubernetes.io/name: ingress-nginx
