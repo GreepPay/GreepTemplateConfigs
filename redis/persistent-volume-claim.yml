@@ -4,7 +4,6 @@ metadata:
   name: ${serviceName}-redis
   namespace: ${environment}-${serviceName}
 spec:
-  storageClassName: azure-disk
   accessModes:
     - ReadWriteOnce
   resources:

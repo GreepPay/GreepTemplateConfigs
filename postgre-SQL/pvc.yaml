@@ -6,8 +6,7 @@ metadata:
   namespace: ${environment}-${serviceName}
 spec:
   accessModes:
-    - ReadWriteOnce 
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi 
-  storageClassName: azure-disk
+      storage: 5Gi
