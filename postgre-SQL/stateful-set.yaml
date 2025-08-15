@@ -33,12 +33,3 @@ spec:
           volumeMounts:
             - name: ${serviceName}-postgresql
               mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-    - metadata:
-        name: ${serviceName}-postgresql
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 5Gi
