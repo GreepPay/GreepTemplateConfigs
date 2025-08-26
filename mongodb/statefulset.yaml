@@ -19,8 +19,6 @@ spec:
         image: mongo:latest
         command:
         - mongod
-        - "--replSet"
-        - rs0
         - "--bind_ip_all"
         ports:
         - containerPort: 27017
